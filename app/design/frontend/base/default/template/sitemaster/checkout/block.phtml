@@ -1,0 +1,38 @@
+<div class="col-md-4">
+</br>
+<?php $isLoggedIn = $this->isCustomerLoggedIn() ?>
+<div id="checkout-block" class="<?php echo $this->helper('sitemaster_checkout')->isLocationAsOneField() ? 'join-address' : 'split-address' ?>">
+    <ul class="infos-menus nav nav-tabs">
+        <li <?php if (!$isLoggedIn): ?> class="current"<?php endif ?>><a href="#new-user"><?php echo $this->__('New User') ?></a></li>
+        <li <?php if ($isLoggedIn): ?> class="current"<?php endif ?>><a href="#<?php echo $isLoggedIn ? 'registered-user' : 'login' ?>" data-toggle="tab"><?php echo $this->__('Registered') ?></a></li>
+        <li class="clear"></li>
+    </ul>
+    <div class="clear"></div>
+    <?php if (!$isLoggedIn): ?><div class="tab-cont new-user">
+        <?php echo $this->getLoginMessagesBlock()->getGroupedHtml() ?>
+        <?php echo $this->getChildHtml('sitemaster_checkout_user_block') ?>
+    </div><?php endif ?>
+    <div class="tab-cont login<?php $isLoggedIn && print ' registered-user'?>"<?php if (!$isLoggedIn): ?> style="display:none"<?php endif ?>>
+        <?php if ($isLoggedIn): ?>
+            <?php echo $this->getLoginMessagesBlock()->getGroupedHtml() ?>
+            <?php echo $this->getChild('sitemaster_checkout_user_block')->setFilled(true)->toHtml() ?>
+        <?php else: ?>
+            <form id="checkout-login-form" action="<?php echo $this->getLoginUrl() ?>" method="post">
+                <div class="field">
+
+                    <input type="text" name="login[username]" placeholder="<?php echo $this->__('Login') ?>" class="input-text required-entry validate-email form-control" />
+                </div>
+                <div class="field">
+
+                    <input type="password" name="login[password]" placeholder="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password form-control" />
+                </div>
+                <div class="buttons">
+                    <a href="<?php echo $this->getUrl('customer/account/forgotpassword') ?>"><?php echo $this->__('Forgot your password?') ?></a>
+                    <button type="submit" class="btn btn-default"><span><span><?php echo $this->__('Log In') ?></span></span></button>
+                </div>
+            </form>
+        <?php endif ?>
+    </div>
+    <div class="overlay"></div>
+</div>
+</div>
